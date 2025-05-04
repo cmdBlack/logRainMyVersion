@@ -23,28 +23,21 @@ if __name__ == '__main__':
         rain_triggered = True
         # print(f"Edge detected on channel {channel}!")
         now = datetime.datetime.now()
-        print
-        now.strftime("%Y-%m-%d %H:%M:%S"), "rain sensor triggered"
+        print now.strftime("%Y-%m-%d %H:%M:%S"), "rain sensor triggered"
 
         try:
-            print
-            "connecting to db"
+            print "connecting to db"
             db = MySQLdb.connect("localhost", "root", "kpapcp", "pagasa")
-            print
-            "success"
+            print "success"
 
             curs = db.cursor()
 
-            print
-            "saving to datalogs"
-            curs.execute(
-                "INSERT INTO datalogs(logtime, logtype, value, unit, description) values(NOW(), 'rr', 0.5, 'mm', 'rain rate measurement')")
+            print "saving to datalogs"
+            curs.execute("INSERT INTO datalogs(logtime, logtype, value, unit, description) values(NOW(), 'rr', 0.5, 'mm', 'rain rate measurement')")
             db.commit()
-            print
-            "success"
+            print "success"
         except Exception as error:
-            print
-            "failed", error
+            print "failed", error
             db.rollback()
         finally:
             curs.close()
@@ -77,24 +70,18 @@ if __name__ == '__main__':
         # if curr_time_str in tenmin_lst and curr_time_str != prev_time:
         if curr_time_str in tenmin_lst and curr_time_str != prev_time and not rain_triggered:
             try:
-                print
-                "connecting to db"
+                print "connecting to db"
                 db = MySQLdb.connect("localhost", "root", "kpapcp", "pagasa")
-                print
-                "success"
+                print "success"
 
                 curs = db.cursor()
 
-                print
-                "saving to datalogs"
-                curs.execute(
-                    "INSERT INTO datalogs(logtime, logtype, value, unit, description) values(NOW(), 'rr', 0.0, 'mm', 'rain rate measurement')")
+                print "saving to datalogs"
+                curs.execute("INSERT INTO datalogs(logtime, logtype, value, unit, description) values(NOW(), 'rr', 0.0, 'mm', 'rain rate measurement')")
                 db.commit()
-                print
-                "success"
+                print "success"
             except Exception as error:
-                print
-                "failed", error
+                print "failed", error
                 db.rollback()
             finally:
                 curs.close()
