@@ -6,7 +6,7 @@ import random
 import MySQLdb
 import os
 
-SW_VER = "1.00"
+SW_VER = "1.10-KM"
 
 GPIO_PIN_DATA = 3
 
