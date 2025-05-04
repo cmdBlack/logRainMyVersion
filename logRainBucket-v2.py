@@ -11,15 +11,16 @@ SW_VER = "1.00"
 GPIO_PIN_DATA = 3
 
 if __name__ == '__main__':
-    print
-    "logRainBucket", "Version", SW_VER
+    print "logRainBucket", "Version", SW_VER
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(GPIO_PIN_DATA, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    rain_triggered = False
 
 
     # Define the callback function
     def my_callback(channel):
-        # rain_triggered = True
+        global rain_triggered
+        rain_triggered = True
         # print(f"Edge detected on channel {channel}!")
         now = datetime.datetime.now()
         print
@@ -56,14 +57,13 @@ if __name__ == '__main__':
     GPIO.add_event_detect(GPIO_PIN_DATA, GPIO.FALLING, callback=my_callback)
 
     # tenmin_lst = [f'{i:02d}:{j:02d}:00' for i in range(24) for j in range(0, 60, 10)]
-    # rain_triggered = False
     tenmin_lst = ['{:02d}:{:02d}:00'.format(i, j) for i in range(24) for j in range(0, 60, 10)]
     # prev_time_lst = []
     prev_time = ''
 
     while True:
 
-        # rain_triggered = False
+        rain_triggered = False
         # gpio_val = GPIO.input(GPIO_PIN_DATA)
 
         now = datetime.datetime.now()
@@ -74,7 +74,8 @@ if __name__ == '__main__':
         # problem if raingauge tips exactly at 10'th minute
         # if curr_time_str in tenmin_lst and curr_time_str not in prev_time_lst and not rain_triggered:
         # if curr_time_str in tenmin_lst and curr_time_str not in prev_time_lst:
-        if curr_time_str in tenmin_lst and curr_time_str != prev_time:
+        # if curr_time_str in tenmin_lst and curr_time_str != prev_time:
+        if curr_time_str in tenmin_lst and curr_time_str != prev_time and not rain_triggered:
             try:
                 print
                 "connecting to db"
